@@ -6,9 +6,9 @@
 import scrapy
 
 
-class ExtractorItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    title = scrapy.Field()
-    description = scrapy.Field()
-    pass
+class JobInjaJobListItem(scrapy.Item):
+    job_title = scrapy.Field()
+    job_link = scrapy.Field()
+    job_company_name = scrapy.Field()
+    job_city = scrapy.Field()
+    job_contract_type = scrapy.Field()
