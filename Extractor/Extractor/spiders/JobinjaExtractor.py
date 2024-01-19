@@ -12,6 +12,7 @@ class JobInjaExtractor(Spider):
         "https://jobinja.ir/jobs/category/it-software-web-development-jobs/%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85"
         "-%D9%88%D8%A8-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%86%D9%88%DB%8C%D8%B3-%D9%86%D8%B1%D9%85-%D8%A7%D9%81"
         "%D8%B2%D8%A7%D8%B1"]
+    page_number = 2
 
     def parse(self, response: Response, **kwargs: Any):
         all_job_adds = response.css("li.o-listView__item")
@@ -38,13 +39,11 @@ class JobInjaExtractor(Spider):
         all_job_adds.clear()
 
         maximum_page_number = int(response.css("#js-jobSearchPaginator a::text").extract()[-2])
-        page_number = 2
-        next_page = f"https://jobinja.ir/jobs/category/it-software-web-development-jobs/%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85-%D9%88%D8%A8-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%86%D9%88%DB%8C%D8%B3-%D9%86%D8%B1%D9%85-%D8%A7%D9%81%D8%B2%D8%A7%D8%B1?&page={str(page_number)}"
-        print(f"-----------------------------{page_number}--{maximum_page_number}------------------------------------")
-        if page_number <= maximum_page_number:
+        next_page = f"https://jobinja.ir/jobs/category/it-software-web-development-jobs/%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85-%D9%88%D8%A8-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%86%D9%88%DB%8C%D8%B3-%D9%86%D8%B1%D9%85-%D8%A7%D9%81%D8%B2%D8%A7%D8%B1?&page={str(JobInjaExtractor.page_number)}"
+        if JobInjaExtractor.page_number <= maximum_page_number:
             print(f"--------------{next_page}")
             yield response.follow(next_page, callback=self.parse)
-            page_number += 1
+            JobInjaExtractor.page_number += 1
 
     @staticmethod
     def process_ad(response: Response, job_list_item, **kwargs: Any):
