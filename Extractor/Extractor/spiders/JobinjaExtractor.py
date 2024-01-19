@@ -39,14 +39,12 @@ class JobInjaExtractor(Spider):
 
         maximum_page_number = int(response.css("#js-jobSearchPaginator a::text").extract()[-2])
         page_number = 2
-        next_page = (f"https://jobinja.ir/jobs/category/it-software-web-development-jobs/%D8%A7%D8%B3%D8%AA%D8%AE%D8"
-                     f"%AF%D8%A7%D9%85-%D9%88%D8%A8-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%86%D9%88%DB%8C%D8%B3-%D9"
-                     f"%86%D8%B1%D9%85-%D8%A7%D9%81%D8%B2%D8%A7%D8%B1?&page={str(page_number)}")
+        next_page = f"https://jobinja.ir/jobs/category/it-software-web-development-jobs/%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85-%D9%88%D8%A8-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%86%D9%88%DB%8C%D8%B3-%D9%86%D8%B1%D9%85-%D8%A7%D9%81%D8%B2%D8%A7%D8%B1?&page={str(page_number)}"
         print(f"-----------------------------{page_number}--{maximum_page_number}------------------------------------")
         if page_number <= maximum_page_number:
             print(f"--------------{next_page}")
-            page_number += 1
             yield response.follow(next_page, callback=self.parse)
+            page_number += 1
 
     @staticmethod
     def process_ad(response: Response, job_list_item, **kwargs: Any):
@@ -72,7 +70,12 @@ class JobInjaExtractor(Spider):
         job_content = response.css(".c-pr40p *::text").getall()
         job_list_item["job_content"] = ''.join(job_content).strip().replace("\n", "")
 
-        job_list_item["company_biography"] = response.css(".c-pr40p~ .o-box__text").css("::text").get().strip().replace("\n", "")
+        company_biography = response.css(".c-pr40p~ .o-box__text").css("::text").get()
+
+        if company_biography is None:
+            company_biography = response.css(".c-pl40p~ .o-box__text").css("::text").get()
+
+        job_list_item["company_biography"] = company_biography.strip().replace("\n", "")
 
         job_list_item["national_service_status"] = response.css(".u-mB0 .c-infoBox__item:nth-child(3) .black").css(
             "::text").get()
