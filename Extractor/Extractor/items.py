@@ -16,3 +16,4 @@ class JobInjaJobListItem(scrapy.Item):
     job_salary = scrapy.Field()
     job_content = scrapy.Field()
     company_biography = scrapy.Field()
+    national_service_status = scrapy.Field()

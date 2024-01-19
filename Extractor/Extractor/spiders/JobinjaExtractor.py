@@ -48,28 +48,32 @@ class JobInjaExtractor(Spider):
             page_number += 1
             yield response.follow(next_page, callback=self.parse)
 
-    def process_ad(self, response: Response, job_list_item, **kwargs: Any):
+    @staticmethod
+    def process_ad(response: Response, job_list_item, **kwargs: Any):
 
-        company_image_url = response.css(".c-companyHeader__logoImage::attr(src)").get()
-        company_category = response.css(
-            '.c-companyHeader__metaItem:nth-child(1) .c-companyHeader__metaLink').css("::text").get()
-        company_population = response.css('.c-companyHeader__metaItem:nth-child(2)::text').get().strip().replace("\n",
-                                                                                                                 "")
-        company_website = response.css(
+        job_list_item["company_image_url"] = response.css(".c-companyHeader__logoImage::attr(src)").get()
+
+        job_list_item["company_category"] = (
+            response.css('.c-companyHeader__metaItem:nth-child(1) .c-companyHeader__metaLink')
+            .css("::text").get())
+
+        job_list_item["company_population"] = response.css(
+            '.c-companyHeader__metaItem:nth-child(2)::text').get().strip().replace("\n", "")
+
+        job_list_item["company_website"] = response.css(
             ".c-companyHeader__metaItem+ .c-companyHeader__metaItem .c-companyHeader__metaLink").css("::text").get()
-        job_minimum_work_experience = response.css(".c-jobView__firstInfoBox .c-infoBox__item:nth-child(4) .black").css(
-            "::text").get()
-        job_salary = response.css(".c-infoBox__item:nth-child(5) .black").css("::text").get().strip().replace("\n", "")
-        job_content = response.css("div.s-jobDesc::text").get()
-        company_biography = response.css(".c-pr40p~ .o-box__text").css("::text").get().strip().replace("\n", "")
 
-        job_list_item["company_image_url"] = company_image_url
-        job_list_item["company_category"] = company_category
-        job_list_item["company_population"] = company_population
-        job_list_item["company_website"] = company_website
-        job_list_item["job_minimum_work_experience"] = job_minimum_work_experience
-        job_list_item["job_salary"] = job_salary
-        job_list_item["job_content"] = job_content
-        job_list_item["company_biography"] = company_biography
-        print(job_list_item["company_biography"])
+        job_list_item["job_minimum_work_experience"] = response.css(
+            ".c-jobView__firstInfoBox .c-infoBox__item:nth-child(4) .black").css("::text").get()
+
+        job_list_item["job_salary"] = (response.css(".c-infoBox__item:nth-child(5) .black").css("::text").get().strip()
+                                       .replace("\n", ""))
+
+        job_content = response.css(".c-pr40p *::text").getall()
+        job_list_item["job_content"] = ''.join(job_content).strip().replace("\n", "")
+
+        job_list_item["company_biography"] = response.css(".c-pr40p~ .o-box__text").css("::text").get().strip().replace("\n", "")
+
+        job_list_item["national_service_status"] = response.css(".u-mB0 .c-infoBox__item:nth-child(3) .black").css(
+            "::text").get()
         yield job_list_item
