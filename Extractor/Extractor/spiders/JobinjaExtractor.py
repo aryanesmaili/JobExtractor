@@ -15,7 +15,6 @@ class JobInjaExtractor(Spider):
         job_list_item = JobInjaJobListItem()
 
         for job_add in all_job_adds:
-            
             job_list_item['job_title'] = job_add.css("a.c-jobListView__titleLink::text").get().strip().replace("\n", "")
 
             job_list_item['job_link'] = job_add.css("a.c-jobListView__titleLink::attr(href)").get().strip()
@@ -31,6 +30,8 @@ class JobInjaExtractor(Spider):
                 "li.c-jobListView__metaItem i.c-icon--resume + span span::text").get().replace(" ", "").replace("\n",
                                                                                                                 "")
             yield job_list_item
+
+        job_list_item.clear()
 
     def process_ad(self, response: Response, **kwargs: Any):
         pass
