@@ -91,13 +91,6 @@ class JobInjaExtractor(Spider):
 
         job_list_item["job_content"] = '\n'.join([x.replace("\n", "").strip() for x in job_content])
 
-        company_biography = response.css(".c-pr40p~ .o-box__text").css("::text").get()
-
-        if company_biography is None:
-            company_biography = response.css(".c-pl40p~ .o-box__text").css("::text").get()
-
-        job_list_item["company_biography"] = company_biography.strip().replace("\n", "")
-
         job_list_item["national_service_status"] = response.css(".u-mB0 .c-infoBox__item:nth-child(3) .black").css(
             "::text").get()
 
