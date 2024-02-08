@@ -5,7 +5,7 @@ from enum import Enum
 from Database import save_to_database
 import re
 import colabfuncs
-
+from scrapy.exceptions import DropItem
 
 class ContractType(Enum):
     """Enumeration representing contract types."""
@@ -139,5 +139,8 @@ class ExtractorPipeline:
             item: The processed item.
         """
         db_row = DatabaseRecord(item)
-        save_to_database(db_row)
-        return item
+        db_record = save_to_database(db_row)
+        if db_record:
+            return item
+        else:
+            raise DropItem
