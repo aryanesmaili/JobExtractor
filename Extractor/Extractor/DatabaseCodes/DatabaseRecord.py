@@ -1,6 +1,6 @@
 import re
 from enum import Enum
-from typing import Union
+from typing import Union, List
 
 from Extractor.Extractor.items import JobInjaJobListItem
 from ..colabfuncs import send_data_to_notebook, process_data_from_notebook
