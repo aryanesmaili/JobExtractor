@@ -1,7 +1,6 @@
-from sqlalchemy import create_engine, Column, Integer, String, Enum, ForeignKey
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy import create_engine, Column, Integer, String, Enum
 from sqlalchemy.ext.declarative import declarative_base
-from enum import Enum as PythonEnum
+from sqlalchemy.orm import sessionmaker
 
 # Define SQLAlchemy engine and base
 engine = create_engine('sqlite:///database.db')
@@ -53,8 +52,8 @@ Base.metadata.create_all(engine)
 # Function for CRUD operations
 class DatabaseManager:
     def __init__(self):
-        Session = sessionmaker(bind=engine)
-        self.session = Session()
+        session = sessionmaker(bind=engine)
+        self.session = session()
 
     def create_record(self, item):
         record = DatabaseRecord(

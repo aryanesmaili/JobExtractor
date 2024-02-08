@@ -1,11 +1,13 @@
-from itemadapter import ItemAdapter
-from typing import Optional, List, Union
-from Extractor.Extractor.items import JobInjaJobListItem
-from enum import Enum
-from Database import save_to_database
 import re
-import colabfuncs
+from enum import Enum
+from typing import List, Union
+
 from scrapy.exceptions import DropItem
+
+import colabfuncs
+from Database import save_to_database
+from Extractor.Extractor.items import JobInjaJobListItem
+
 
 class ContractType(Enum):
     """Enumeration representing contract types."""
@@ -24,6 +26,7 @@ class NationalServiceStatus(Enum):
 
 class DatabaseRecord:
     """Class to represent a record to be saved in the database."""
+    notebook_url = ""
 
     @staticmethod
     def convert_persian_numbers_to_int(text: str) -> str:
@@ -116,7 +119,8 @@ class DatabaseRecord:
 
         # the part that gets sent to external services.
         items_to_be_processed = [self.job_title, item.job_content]
-        processed_data = colabfuncs.process_data_from_notebook(colabfuncs.send_data_to_notebook(items_to_be_processed))
+        processed_data = colabfuncs.process_data_from_notebook(
+            colabfuncs.send_data_to_notebook(self.notebook_url, items_to_be_processed))
         self.job_field = processed_data[0]
         self.job_hard_skills_required: List[str] = processed_data[1]
         self.job_soft_skills_required: Union[List[str], None] = processed_data[2]
