@@ -1,11 +1,9 @@
 import re
 from enum import Enum
 from typing import List, Union
-
 from scrapy.exceptions import DropItem
-
 import colabfuncs
-from Database import save_to_database
+from Extractor.Extractor.DatabaseCodes.Database import save_to_database
 from Extractor.Extractor.items import JobInjaJobListItem
 
 

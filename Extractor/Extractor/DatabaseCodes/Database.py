@@ -1,5 +1,5 @@
-from DatabaseCodes.dbtable import DatabaseManager
-from pipelines import DatabaseRecord
+from dbtable import DatabaseManager
+from ..pipelines import DatabaseRecord
 
 
 def save_to_database(db_row: DatabaseRecord) -> bool:
