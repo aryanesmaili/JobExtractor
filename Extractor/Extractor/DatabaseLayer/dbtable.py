@@ -1,24 +1,11 @@
 from sqlalchemy import create_engine, Column, Integer, String, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from ..DatabaseLayer.DatabaseRecord import ContractType, NationalServiceStatus
 
 # Define SQLAlchemy engine and base
-engine = create_engine('sqlite:///database.db')
+engine = create_engine('sqlite:///database.db', echo=True)
 Base = declarative_base()
-
-
-# Define Enumerations
-class ContractType(Enum):
-    full_time = 'full_time'
-    part_time = 'part_time'
-    internship = 'internship'
-    remote = 'remote'
-
-
-class NationalServiceStatus(Enum):
-    full_exemption = 'Exemption'
-    educational_exemption = 'Educational_Exemption'
-    not_needed = 'Not_needed'
 
 
 # Define DatabaseRecord table
