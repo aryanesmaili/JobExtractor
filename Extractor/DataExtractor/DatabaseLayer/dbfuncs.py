@@ -1,5 +1,5 @@
-from ..DatabaseLayer.dbtable import DatabaseManager
 from ..DatabaseLayer.DatabaseRecord import DatabaseRecord
+from ..DatabaseLayer.dbtable import DatabaseManager
 
 
 def save_to_database(db_row: DatabaseRecord) -> bool:

@@ -1,6 +1,7 @@
 from scrapy.exceptions import DropItem
-from Extractor.DatabaseLayer.dbfuncs import save_to_database
-from Extractor.DatabaseLayer.DatabaseRecord import DatabaseRecord
+
+from Extractor.DataExtractor.DatabaseLayer.DatabaseRecord import DatabaseRecord
+from Extractor.DataExtractor.DatabaseLayer.dbfuncs import save_to_database
 
 
 class ExtractorPipeline:

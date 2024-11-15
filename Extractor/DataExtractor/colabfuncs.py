@@ -1,7 +1,7 @@
 import json
+from typing import Tuple, List
 
 import requests
-from typing import Tuple, List
 
 
 def send_data_to_notebook(url: str, data: List[str]) -> str:

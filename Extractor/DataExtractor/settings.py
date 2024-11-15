@@ -1,4 +1,4 @@
-# Scrapy settings for Extractor project
+# Scrapy settings for DataExtractor project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,13 +7,13 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "Extractor"
+BOT_NAME = "DataExtractor"
 
-SPIDER_MODULES = ["Extractor.spiders"]
-NEWSPIDER_MODULE = "Extractor.spiders"
+SPIDER_MODULES = ["DataExtractor.spiders"]
+NEWSPIDER_MODULE = "DataExtractor.spiders"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = "Extractor (+http://www.yourdomain.com)"
+# USER_AGENT = "DataExtractor (+http://www.yourdomain.com)"
 USER_AGENT = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 
 # Obey robots.txt rules
@@ -45,7 +45,7 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    "Extractor.middlewares.ExtractorSpiderMiddleware": 543,
+#    "DataExtractor.middlewares.ExtractorSpiderMiddleware": 543,
 # }
 
 # Enable or disable downloader middlewares
@@ -63,7 +63,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "Extractor.pipelines.ExtractorPipeline": 300,
+    "DataExtractor.pipelines.ExtractorPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
