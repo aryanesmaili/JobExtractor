@@ -1,6 +1,8 @@
 from typing import Any
+
 from scrapy.http import Response
 from scrapy.spiders import Spider
+
 from ..items import JobInjaJobListItem
 
 
@@ -9,9 +11,7 @@ class JobInjaExtractor(Spider):
     name = "JobInjaExtractor"
     allowed_domains = ["jobinja.ir"]
     start_urls = [
-        "https://jobinja.ir/jobs/category/it-software-web-development-jobs/%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85"
-        "-%D9%88%D8%A8-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%86%D9%88%DB%8C%D8%B3-%D9%86%D8%B1%D9%85-%D8%A7%D9%81"
-        "%D8%B2%D8%A7%D8%B1"]
+        "https://jobinja.ir/jobs/category/it-software-web-development-jobs/%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85-%D9%88%D8%A8-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%86%D9%88%DB%8C%D8%B3-%D9%86%D8%B1%D9%85-%D8%A7%D9%81%D8%B2%D8%A7%D8%B1"]
     page_number = 2
 
     def parse(self, response: Response, **kwargs: Any):
@@ -87,7 +87,7 @@ class JobInjaExtractor(Spider):
         job_list_item["job_salary"] = (response.css(".c-infoBox__item:nth-child(5) .black").css("::text").get().strip()
                                        .replace("\n", ""))
 
-        job_content = response.css(".c-pr40p *::text").getall()
+        job_content = response.css('div.o-box__text.s-jobDesc ::text').getall()
 
         job_list_item["job_content"] = '\n'.join([x.replace("\n", "").strip() for x in job_content])
 

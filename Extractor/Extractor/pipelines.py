@@ -1,9 +1,3 @@
-from scrapy.exceptions import DropItem
-
-from Extractor.DataExtractor.DatabaseLayer.DatabaseRecord import DatabaseRecord
-from Extractor.DataExtractor.DatabaseLayer.dbfuncs import save_to_database
-
-
 class ExtractorPipeline:
     """Class to process extracted items and save them to the database."""
 
@@ -18,9 +12,9 @@ class ExtractorPipeline:
         Returns:
             item: The processed item.
         """
-        db_row = DatabaseRecord(item)
-        db_record = save_to_database(db_row)
-        if db_record:
-            return item
-        else:
-            raise DropItem
+        # db_row = DatabaseRecord(item)
+        # db_record = save_to_database(db_row)
+        # if db_record:
+        return item
+        # else:
+        #     raise DropItem

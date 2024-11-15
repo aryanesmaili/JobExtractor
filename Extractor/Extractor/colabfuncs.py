@@ -4,7 +4,7 @@ from typing import Tuple, List
 import requests
 
 
-def send_data_to_notebook(url: str, data: List[str]) -> str:
+def send_data_to_external_service(url: str, data: List[str]) -> str:
     """
     sends the part of scraped data to the notebook to be processed.
     :param data: the data to send.
@@ -19,7 +19,7 @@ def send_data_to_notebook(url: str, data: List[str]) -> str:
     return response.text
 
 
-def process_data_from_notebook(data: str) -> Tuple[str, List[str], List[str], List[str], str]:
+def process_incoming_data(data: str) -> Tuple[str, List[str], List[str], List[str], str]:
     """
     processes the response from the notebook.
     :param data: the data to process

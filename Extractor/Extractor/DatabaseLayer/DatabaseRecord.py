@@ -2,9 +2,8 @@ import re
 from enum import Enum
 from typing import Union, List
 
-from Extractor.items import JobInjaJobListItem
-
-from ..colabfuncs import send_data_to_notebook, process_data_from_notebook
+from ..colabfuncs import send_data_to_external_service, process_incoming_data
+from ..items import JobInjaJobListItem
 
 
 class ContractType(Enum):
@@ -116,8 +115,7 @@ class DatabaseRecord:
 
         # the part that gets sent to external services.
         items_to_be_processed = [self.job_title, item["job_content"]]
-        processed_data = process_data_from_notebook(
-            send_data_to_notebook(self.notebook_url, items_to_be_processed))
+        processed_data = process_incoming_data(send_data_to_external_service(self.notebook_url, items_to_be_processed))
         self.job_field: str = processed_data[0]
         self.job_hard_skills_required: List[str] = processed_data[1]
         self.job_soft_skills_required: Union[List[str], None] = processed_data[2]
