@@ -2,8 +2,8 @@ import re
 from enum import Enum
 from typing import Union, List
 
-from ..colabfuncs import send_data_to_external_service, process_incoming_data
 from ..items import JobInjaJobListItem
+from ...Processor.OutputModel import JobDetails
 
 
 class ContractType(Enum):
@@ -20,7 +20,7 @@ class NationalServiceStatus(Enum):
     NOT_NEEDED = 'Not_needed'
 
 
-class DatabaseRecord:
+class JobCreateDTO:
     """Class to represent a record to be saved in the database."""
     notebook_url = ""
 
@@ -92,32 +92,29 @@ class DatabaseRecord:
             case _:
                 return None
 
-    def __init__(self, item: JobInjaJobListItem):
+    def __init__(self, raw_scraped_item: JobInjaJobListItem, ai_processed_item: JobDetails):
         """
         Initialize a DatabaseRecord object.
 
         Args:
-            item (JobInjaJobListItem): The item to extract data from.
+            raw_scraped_item (JobInjaJobListItem): The item to extract data from.
         """
-        self.job_title: str = item['job_title']
-        self.job_link: str = item['job_link']
-        self.job_company_name: str = item['job_company_name']
-        self.job_city: str = item["job_city"]
-        self.job_contract_type: ContractType = self.detect_contract_type(item["job_contract_type"])
-        self.company_image_url: str = item["company_image_url"]
-        self.company_category: str = item["company_category"]
-        self.company_population: str = item["company_population"]
-        self.company_website: Union[str, None] = item["company_website"]
-        self.job_minimum_work_experience: Union[str, None] = item["job_minimum_work_experience"]
-        self.minimum_job_salary: Union[str, None] = self.convert_persian_numbers_to_int(item["job_salary"])
+        self.job_title: str = raw_scraped_item['job_title']
+        self.job_link: str = raw_scraped_item['job_link']
+        self.job_company_name: str = raw_scraped_item['job_company_name']
+        self.job_city: str = raw_scraped_item["job_city"]
+        self.job_contract_type: ContractType = self.detect_contract_type(raw_scraped_item["job_contract_type"])
+        self.company_image_url: str = raw_scraped_item["company_image_url"]
+        self.company_category: str = raw_scraped_item["company_category"]
+        self.company_population: str = raw_scraped_item["company_population"]
+        self.company_website: Union[str, None] = raw_scraped_item["company_website"]
+        self.job_minimum_work_experience: Union[str, None] = raw_scraped_item["job_minimum_work_experience"]
+        self.minimum_job_salary: Union[str, None] = self.convert_persian_numbers_to_int(raw_scraped_item["job_salary"])
         self.national_service_status: Union[NationalServiceStatus, None] = self.detect_national_service_status(
-            item["national_service_status"])
+            raw_scraped_item["national_service_status"])
 
-        # the part that gets sent to external services.
-        items_to_be_processed = [self.job_title, item["job_content"]]
-        processed_data = process_incoming_data(send_data_to_external_service(self.notebook_url, items_to_be_processed))
-        self.job_field: str = processed_data[0]
-        self.job_hard_skills_required: List[str] = processed_data[1]
-        self.job_soft_skills_required: Union[List[str], None] = processed_data[2]
-        self.job_benefits: Union[List[str], None] = processed_data[3]
-        self.company_address: Union[str, None] = processed_data[4]
+        self.job_field: str = ai_processed_item.job_field
+        self.job_hard_skills_required: List[str] = []
+        self.job_soft_skills_required: Union[List[str], None] = []
+        self.job_benefits: Union[List[str], None] = []
+        self.company_address: Union[str, None] = ""

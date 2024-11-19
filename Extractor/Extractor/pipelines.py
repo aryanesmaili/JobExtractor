@@ -1,6 +1,6 @@
 import json
 
-from ..redis.redisqueue import RedisQueue
+from .redis.redisqueue import RedisQueue
 
 
 class ExtractorPipeline:

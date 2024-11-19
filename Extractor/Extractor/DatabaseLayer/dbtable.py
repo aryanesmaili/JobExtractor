@@ -1,11 +1,13 @@
-from sqlalchemy import create_engine, Column, Integer, String, Enum
+from sqlalchemy import create_engine, Column, Integer, String, Enum, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from ..DatabaseLayer.DatabaseRecord import ContractType, NationalServiceStatus
+from ..DatabaseLayer.JobCreateDTO import ContractType, NationalServiceStatus
 
 # Define SQLAlchemy engine and base
-engine = create_engine('sqlite:///database.db', echo=True)
+connection_string = f"postgresql://aryan:a123@localhost:5432/JobExt"
+
+engine = create_engine(connection_string)
 Base = declarative_base()
 
 
@@ -27,9 +29,9 @@ class DatabaseRecord(Base):
     minimum_job_salary = Column(String, nullable=True)
     national_service_status = Column(Enum(NationalServiceStatus), nullable=True)
     job_field = Column(String)
-    job_hard_skills_required = Column(String)
-    job_soft_skills_required = Column(String, nullable=True)
-    job_benefits = Column(String, nullable=True)
+    job_hard_skills_required = Column(JSON)
+    job_soft_skills_required = Column(JSON, nullable=True)
+    job_benefits = Column(JSON, nullable=True)
     company_address = Column(String, nullable=True)
 
 
@@ -58,9 +60,9 @@ class DatabaseManager:
             minimum_job_salary=item.minimum_job_salary,
             national_service_status=item.national_service_status,
             job_field=item.job_field,
-            job_hard_skills_required=','.join(item.job_hard_skills_required),
-            job_soft_skills_required=','.join(item.job_soft_skills_required) if item.job_soft_skills_required else None,
-            job_benefits=','.join(item.job_benefits) if item.job_benefits else None,
+            job_hard_skills_required=item.job_hard_skills_required,
+            job_soft_skills_required=item.job_soft_skills_required,
+            job_benefits=item.job_benefits,
             company_address=item.company_address
         )
         self.session.add(record)

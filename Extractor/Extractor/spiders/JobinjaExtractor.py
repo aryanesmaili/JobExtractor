@@ -89,7 +89,7 @@ class JobInjaExtractor(Spider):
 
         job_content = response.css('div.o-box__text.s-jobDesc ::text').getall()
 
-        job_list_item["job_content"] = '\n'.join([x.replace("\n", "").strip() for x in job_content])
+        job_list_item["job_content"] = ' '.join([x.strip() for x in job_content])
 
         job_list_item["national_service_status"] = response.css(".u-mB0 .c-infoBox__item:nth-child(3) .black").css(
             "::text").get()
