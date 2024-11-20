@@ -17,18 +17,3 @@ class JobInjaJobListItem(scrapy.Item):
     job_content = scrapy.Field()
     national_service_status = scrapy.Field()
 
-#       jobURL: "", Done
-#       CompanyTitle:"", Done
-#       CompanyWebsite : "", Done
-#       CompanyStaffCount: "", Done
-#       CompanyLocationCity: "", Done
-#       AdTitle: "", Done
-#       MinimumWorkExperienceRequiredYears: "",
-#       MilitaryServiceState: True for needed False for not needed None for not mentioned,
-#       JobSalary: "int salary if mentioned, None if it is negotiable",
-#       JobWorkingHours: fulltime or part time or else,
-#       JobField: what tech field is it? web(backend) or embedded systems or AI etc,
-#       HardSkillsRequired: "",
-#       SoftSkillsRequired: "",
-#       Benefits: "",
-#       CompanyAddress: "",

@@ -8,7 +8,7 @@ class ExtractorPipeline:
     """Class to process extracted items and publish them to Redis."""
 
     def __init__(self, redis_host='localhost', redis_port=9090, channel='raw_data'):
-        self.queue = RedisList(host=redis_host, port=redis_port, channel=channel)
+        self.redis_list = RedisList(host=redis_host, port=redis_port, channel=channel)
 
     def process_item(self, item : JobInjaJobListItem, spider):
         """
@@ -24,8 +24,8 @@ class ExtractorPipeline:
 
         if item:
             # Convert the item to JSON and publish it to Redis
-            message = json.dumps(dict(item))
-            self.queue.left_push(message)
+            message = json.dumps(dict(item), ensure_ascii=False)
+            self.redis_list.left_push(message)
             spider.logger.info(f"Published item to Redis: {message}")
             return item
         else:

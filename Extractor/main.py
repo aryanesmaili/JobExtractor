@@ -1,15 +1,20 @@
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
+
+from Extractor.Extractor.DatabaseLayer.db_consumer import DBConsumer
 from Extractor.spiders.JobinjaExtractor import JobInjaExtractor
-from Extractor.Processor.Consumer import DataConsumer
+from Extractor.Processor.processor_consumer import RawDataConsumer
+
 import multiprocessing
+
 
 def run_consumer():
     """
     Function to start the data consumer process.
     """
-    consumer = DataConsumer()
+    consumer = RawDataConsumer()
     consumer.run()
+
 
 def run_spider():
     """
@@ -27,15 +32,27 @@ def run_spider():
     # Start the crawler
     process.start()
 
+
+def run_db_consumer():
+    """
+    Function to start the db consumer process.
+    """
+    consumer = DBConsumer()
+    consumer.run()
+
+
 if __name__ == "__main__":
-    # Use multiprocessing instead of threading
-    consumer_process = multiprocessing.Process(target=run_consumer)
+    # making the processes
+    raw_consumer_process = multiprocessing.Process(target=run_consumer)
+    db_consumer_process = multiprocessing.Process(target=run_db_consumer)
     spider_process = multiprocessing.Process(target=run_spider)
 
-    # Start both processes
-    consumer_process.start()
+    # Start processes
+    raw_consumer_process.start()
     spider_process.start()
+    db_consumer_process.start()
 
     # Wait for both processes to complete
     spider_process.join()
-    consumer_process.join()
+    raw_consumer_process.join()
+    db_consumer_process.join()
