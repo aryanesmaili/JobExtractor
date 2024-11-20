@@ -3,9 +3,10 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import OllamaLLM
 
 from .OutputModel import JobDetails
+from ..items import JobInjaJobListItem
 
 
-def ai_process(userinput) -> JobDetails:
+def ai_process(userinput: JobInjaJobListItem) -> JobDetails:
     # Create the output parser
     parser = PydanticOutputParser(pydantic_object=JobDetails)
 
@@ -13,7 +14,7 @@ def ai_process(userinput) -> JobDetails:
     format_instructions = parser.get_format_instructions()
 
     template = """
-    Please follow the format below strictly:
+    Please follow the format below strictly and Don't say anything but the result object:
      Field Descriptions:
      job_field: The general field of the job (e.g., "Web Backend", "Embedded Systems", "AI").
      job_hard_skills_required: A list of technical skills needed for the job. Each skill should be an object containing:
@@ -78,8 +79,9 @@ def ai_process(userinput) -> JobDetails:
     llm = OllamaLLM(model="llama3.2")
     chain = prompt | llm
 
+    raw_input = {"Job_Title": userinput['job_title'], "Job_Content": userinput['job_content']}
     # Add the format instructions to the input
-    full_input = f"Extract job details from this job description: {userinput}"
+    full_input = f"Extract job details from this job description: {raw_input}"
 
     # Generate response
     response = chain.invoke({"input": full_input, "format_instructions": format_instructions})

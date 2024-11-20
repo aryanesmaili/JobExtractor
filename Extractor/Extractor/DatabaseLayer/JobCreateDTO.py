@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from typing import Union, List
 
-from ..Processor.OutputModel import JobDetails
+from ..Processor.OutputModel import JobDetails, HardSkill, SoftSkill, Benefit
 from ..items import JobInjaJobListItem
 
 
@@ -114,7 +114,7 @@ class JobCreateDTO:
             raw_scraped_item["national_service_status"])
 
         self.job_field: str = ai_processed_item.job_field
-        self.job_hard_skills_required: List[str] = []
-        self.job_soft_skills_required: Union[List[str], None] = []
-        self.job_benefits: Union[List[str], None] = []
-        self.company_address: Union[str, None] = ""
+        self.job_hard_skills_required: List[HardSkill] = ai_processed_item.job_hard_skills_required
+        self.job_soft_skills_required: Union[List[SoftSkill], None] = ai_processed_item.job_soft_skills_required
+        self.job_benefits: Union[List[Benefit], None] = ai_processed_item.job_benefits
+        self.company_address: Union[str, None] = ai_processed_item.company_address

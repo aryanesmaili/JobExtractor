@@ -1,16 +1,19 @@
 import json
+import time
 
 from ..DatabaseLayer import JobCreateDTO
 from ..DatabaseLayer.dbfuncs import save_to_database
 from ..items import JobInjaJobListItem
-from ..rediscodes.redisqueue import RedisQueue
+from ..rediscodes.redislist import RedisList
 from .OutputModel import JobDetails
 from .ai_processor import ai_process
 
 
 class DataConsumer:
     def __init__(self, redis_host='localhost', redis_port=9090, channel='raw_data'):
-        self.queue = RedisQueue(host=redis_host, port=redis_port, channel=channel)
+        self.redis = RedisList(host=redis_host, port=redis_port, channel=channel)
+        self.running = True
+        self.channel = channel
 
     @staticmethod
     def process_message(message):
@@ -26,12 +29,10 @@ class DataConsumer:
 
     def run(self):
         """
-        Continuously listen to the Redis channel for new messages.
+        Continuously listen to the Redis list and process messages.
         """
-        pubsub = self.queue.subscribe()
-        print(f"Subscribed to channel: {self.queue.channel}")
-
-        for message in pubsub.listen():
-            if message['type'] == 'message':  # Ensure it's an actual message
-                raw_message = message['data']
-                self.process_message(raw_message)
+        print(f"Listening to list: {self.channel}")
+        while True:
+            raw_message = self.redis.blocking_right_pop()  # Block until a message is available
+            self.process_message(raw_message)
+            time.sleep(3)
