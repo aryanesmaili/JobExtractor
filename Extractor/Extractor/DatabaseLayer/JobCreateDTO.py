@@ -2,8 +2,8 @@ import re
 from enum import Enum
 from typing import Union, List
 
+from ..Processor.OutputModel import JobDetails
 from ..items import JobInjaJobListItem
-from ...Processor.OutputModel import JobDetails
 
 
 class ContractType(Enum):

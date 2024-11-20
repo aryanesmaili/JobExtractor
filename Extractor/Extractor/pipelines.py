@@ -1,6 +1,7 @@
 import json
 
-from .redis.redisqueue import RedisQueue
+from .items import JobInjaJobListItem
+from .rediscodes.redisqueue import RedisQueue
 
 
 class ExtractorPipeline:
@@ -9,7 +10,7 @@ class ExtractorPipeline:
     def __init__(self, redis_host='localhost', redis_port=9090, channel='raw_data'):
         self.queue = RedisQueue(host=redis_host, port=redis_port, channel=channel)
 
-    def process_item(self, item, spider):
+    def process_item(self, item : JobInjaJobListItem, spider):
         """
         Process an extracted item and publish it to Redis.
 

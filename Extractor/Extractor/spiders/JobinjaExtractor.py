@@ -52,8 +52,10 @@ class JobInjaExtractor(Spider):
 
         # we clear the list of job advertisements when we've processed all of them.
         all_job_adds.clear()
-
-        maximum_page_number = int(response.css("#js-jobSearchPaginator a::text").extract()[-2])
+        try:
+            maximum_page_number = int(response.css("#js-jobSearchPaginator a::text").extract()[-2])
+        except:
+            maximum_page_number = 50
         next_page = (f"https://jobinja.ir/jobs/category/it-software-web-development-jobs/%D8%A7%D8%B3%D8%AA%D8%AE%D8"
                      f"%AF%D8%A7%D9%85-%D9%88%D8%A8-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87-%D9%86%D9%88%DB%8C%D8%B3-%D9"
                      f"%86%D8%B1%D9%85-%D8%A7%D9%81%D8%B2%D8%A7%D8%B1?&page={str(JobInjaExtractor.page_number)}")

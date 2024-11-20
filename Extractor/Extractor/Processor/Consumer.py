@@ -1,11 +1,11 @@
 import json
 
-from Extractor.Extractor.redis.redisqueue import RedisQueue
-from OutputModel import JobDetails
-from ai_processor import ai_process
-from ..Extractor.DatabaseLayer.JobCreateDTO import JobCreateDTO
-from ..Extractor.DatabaseLayer.dbfuncs import save_to_database
-from ..Extractor.items import JobInjaJobListItem
+from ..DatabaseLayer import JobCreateDTO
+from ..DatabaseLayer.dbfuncs import save_to_database
+from ..items import JobInjaJobListItem
+from ..rediscodes.redisqueue import RedisQueue
+from .OutputModel import JobDetails
+from .ai_processor import ai_process
 
 
 class DataConsumer:
@@ -33,4 +33,5 @@ class DataConsumer:
 
         for message in pubsub.listen():
             if message['type'] == 'message':  # Ensure it's an actual message
-                self.process_message()
+                raw_message = message['data']
+                self.process_message(raw_message)

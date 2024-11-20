@@ -2,7 +2,7 @@ from langchain.output_parsers import PydanticOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import OllamaLLM
 
-from OutputModel import JobDetails
+from .OutputModel import JobDetails
 
 
 def ai_process(userinput) -> JobDetails:
